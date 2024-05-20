@@ -3,13 +3,21 @@
   "version": "1.0.50",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "bun run --watch src/index.ts"
+    "dev": "bun run --watch src/index.ts",
+    "build": "bun build ./src/index.ts --compile --outfile build/app",
+    "start": "NODE_ENV=production bun build/my-app"
   },
   "dependencies": {
-    "elysia": "latest"
+    "@elysiajs/bearer": "^1.0.2",
+    "@elysiajs/jwt": "^1.0.2",
+    "@elysiajs/swagger": "^1.0.5",
+    "@prisma/client": "^5.14.0",
+    "elysia": "latest",
+    "http-status-codes": "^2.3.0"
   },
   "devDependencies": {
-    "bun-types": "latest"
+    "bun-types": "latest",
+    "prisma": "^5.14.0"
   },
   "module": "src/index.js"
 }
