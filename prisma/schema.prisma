@@ -14,21 +14,27 @@ datasource db {
 }
 
 model User {
-  id       String   @id @default(cuid())
-  name     String?  @db.VarChar(100)
-  email    String   @unique
+  id       String  @id @default(cuid())
+  name     String? @db.VarChar(100)
+  email    String  @unique
   password String
-  account  Account?
+  role     Role    @default(USER)
+  token    Token?
 
   @@map("users")
 }
 
-model Account {
+enum Role {
+  USER
+  ADMIN
+}
+
+model Token {
   user_id       String  @id @unique
   refresh_token String? @db.Text
   access_token  String? @db.Text
 
   userId User @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
-  @@map("account")
+  @@map("token")
 }

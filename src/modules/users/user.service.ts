@@ -1,12 +1,10 @@
+import { User } from "@prisma/client";
 import { StatusCodes } from "http-status-codes";
 import { usersRepo } from "./user.repo";
-import { User } from "@prisma/client";
-import Elysia, { StatusMap } from "elysia";
-import { ElysiaErrors } from "elysia/dist/error";
 
 export const userService = {
-  getAllUser: () =>
-    usersRepo()
+  getAll: () =>
+    usersRepo
       .findMany()
       .then((res) =>
         !res
@@ -18,22 +16,27 @@ export const userService = {
         status: StatusCodes.INTERNAL_SERVER_ERROR,
       })),
 
-  getUserById: (id: string) =>
-    usersRepo()
-      .findUserById(id)
+  getById: (id: string) =>
+    usersRepo
+      .findById(id)
       .then((res) =>
         !res
-          ? { message: "User not found", status: StatusCodes.NOT_FOUND }
+          ? {
+              message: "User not found",
+              status: StatusCodes.NOT_FOUND,
+              data: res,
+            }
           : { message: "success", status: StatusCodes.OK, data: res }
       )
       .catch((err) => ({
         message: "Internal server error",
         status: StatusCodes.INTERNAL_SERVER_ERROR,
+        data: null,
       })),
 
-  getUserByEmail: (email: string) =>
-    usersRepo()
-      .findUserByEmail(email)
+  getByEmail: (email: string) =>
+    usersRepo
+      .findByEmail(email)
       .then((res) =>
         !res
           ? { message: "User not found", status: StatusCodes.NOT_FOUND }
@@ -44,16 +47,16 @@ export const userService = {
         status: StatusCodes.INTERNAL_SERVER_ERROR,
       })),
 
-  postUser: async (data: User) => {
+  post: async (data: User) => {
     try {
-      const res = await usersRepo().findUserByEmail(data.email);
+      const res = await usersRepo.findByEmail(data.email);
       if (res) {
         return {
           message: "User already exist",
           status: StatusCodes.CONFLICT,
         };
       }
-      const res2 = await usersRepo().createUser(data);
+      const res2 = await usersRepo.create(data);
       return {
         message: "success",
         status: StatusCodes.CREATED,
