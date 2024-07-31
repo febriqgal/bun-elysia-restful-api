@@ -5,7 +5,6 @@ import { StatusCodes } from "http-status-codes";
 export const userController = (app: Elysia) =>
   app.group("/user", (user) =>
     user
-
       .get(
         "/",
         ({ query: { email, id } }) => {

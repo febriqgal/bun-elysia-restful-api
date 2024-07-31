@@ -28,6 +28,7 @@ export const userService = {
             }
           : { message: "success", status: StatusCodes.OK, data: res }
       )
+
       .catch((err) => ({
         message: "Internal server error",
         status: StatusCodes.INTERNAL_SERVER_ERROR,
